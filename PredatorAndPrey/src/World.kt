@@ -16,8 +16,14 @@ class World(val width: Int, val height: Int) {
                 val r = ThreadLocalRandom.current().nextInt(0, 1000)
                 when {
                     r > 100 -> creatures[x][y].type = Creature.Type.NONE
-                    r > 50  -> creatures[x][y].type = Creature.Type.Prey
-                    else    -> creatures[x][y].type = Creature.Type.Predator
+                    r > 50  -> {
+                        preyCount++
+                        creatures[x][y].type = Creature.Type.Prey
+                    }
+                    else    -> {
+                        predatorCount++
+                        creatures[x][y].type = Creature.Type.Predator
+                    }
                 }
             }
         }
@@ -64,6 +70,7 @@ class World(val width: Int, val height: Int) {
         creature.hp--
         if(creature.hp <= 0) {
             creature.type = Creature.Type.NONE
+            predatorCount--
             return
         }
         
@@ -71,9 +78,11 @@ class World(val width: Int, val height: Int) {
             Creature.Type.Prey     -> {
                 // Heal for as much as the other had hp
                 creature.hp += otherCreature.hp
+                preyCount--
                 
                 // The other creature becomes a predator
                 otherCreature.type = Creature.Type.Predator
+                predatorCount++
             }
             
             Creature.Type.Predator -> {
@@ -109,6 +118,7 @@ class World(val width: Int, val height: Int) {
                     // "Spawn" a new Prey at the target position
                     otherCreature.type = Creature.Type.Prey
                     otherCreature.hp = 10
+                    preyCount++
                 } else {
                     // Set the creature where to move to to the current creature
                     otherCreature.type = creature.type

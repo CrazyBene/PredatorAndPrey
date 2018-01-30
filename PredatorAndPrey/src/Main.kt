@@ -1,4 +1,5 @@
 import java.awt.Color
+import java.awt.Font
 import java.awt.Graphics
 import java.awt.Graphics2D
 import javax.swing.JFrame
@@ -101,9 +102,9 @@ class Main : JPanel(), Runnable {
         
         if(world == null) return
         
-        // NOTE: No need to display the black squares
         for(y in 0 until world.height) {
             for(x in 0 until world.width) {
+                // NOTE: No need to display the black squares
                 if(world.creatures[x][y].type == Creature.Type.NONE)
                     continue
                 
@@ -114,6 +115,14 @@ class Main : JPanel(), Runnable {
                     g2d.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
             }
         }
+        
+        g2d.scale(1.0, -1.0)
+        val prey = world.preyCount
+        val predator = world.predatorCount
+        g2d.color = Color.WHITE
+        g2d.font = Font("TimesRoman", Font.PLAIN, 20)
+        g2d.drawString("Prey: $prey", 10, -height + 25)
+        g2d.drawString("Predator: $predator", 10, -height + 50)
         
         g2d.dispose()
     }

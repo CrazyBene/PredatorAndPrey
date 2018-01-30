@@ -11,6 +11,8 @@ class World(val width: Int, val height: Int) {
     var predatorCount = 0
     var stepCount = 0
     
+    val points = mutableListOf<Pair<Int, Int>>()
+    
     init {
         for(y in 0 until height) {
             for(x in 0 until width) {
@@ -28,6 +30,11 @@ class World(val width: Int, val height: Int) {
                 }
             }
         }
+        for(y in 0 until height) {
+            for(x in 0 until width) {
+                points.add(Pair(x, y))
+            }
+        }
     }
     
     // NOTE: This loop should maybe be random or the oldest creatures move first (same creature order all the time)
@@ -35,31 +42,58 @@ class World(val width: Int, val height: Int) {
         stepCount++
         stepFlag = if(stepFlag == 0) 1 else 0
         
+//        shuffleNumbers()
+//
+//        points.forEach {
+//            val x = it.first
+//            val y = it.second
+//
+//            // Get the current creature
+//            val creature = creatures[x][y]
+//
+//            // If the creature already interacted this turn, ignore it
+//            if(creature.stepFlag != stepFlag) {
+//                // If it is nothing (none) just ignore it
+//                if(creature.type != Creature.Type.NONE) {
+//                    // Get the creature on the tile the creature wants to move
+//                    val otherCreature = getRandomNeighborCreature(x, y)
+//
+//                    // HERE are the rules of this cellular automata
+//                    when(creature.type) {
+//                        Creature.Type.Predator -> stepPredator(creature, otherCreature)
+//                        Creature.Type.Prey     -> stepPrey(creature, otherCreature)
+//
+//                        Creature.Type.NONE     -> {
+//                        }
+//                    }
+//                }
+//            }
+//        }
         
         for(y in 0 until height) {
             for(x in 0 until width) {
-                
+
                 // Get the current creature
                 val creature = creatures[x][y]
-                
+
                 // If the creature already interacted this turn, ignore it
                 if(creature.stepFlag == stepFlag)
                     continue
                 else
                     creature.stepFlag = stepFlag
-                
+
                 // If it is nothing (none) just ignore it
                 if(creature.type == Creature.Type.NONE)
                     continue
-                
+
                 // Get the creature on the tile the creature wants to move
                 val otherCreature = getRandomNeighborCreature(x, y)
-                
+
                 // HERE are the rules of this cellular automata
                 when(creature.type) {
                     Creature.Type.Predator -> stepPredator(creature, otherCreature)
                     Creature.Type.Prey     -> stepPrey(creature, otherCreature)
-                    
+
                     Creature.Type.NONE     -> {
                     }
                 }
@@ -144,6 +178,17 @@ class World(val width: Int, val height: Int) {
         nextY = if(nextY == height) 0 else if(nextY < 0) height - 1 else nextY
 
         return creatures[nextX][nextY]
+    }
+    
+    private fun shuffleNumbers() {
+        val r = ThreadLocalRandom.current()
+        for(i in points.size - 1 downTo 0) {
+            val index = r.nextInt(i+1)
+        
+            val a = points[index]
+            points[index] = points[i]
+            points[i] = a
+        }
     }
     
 }

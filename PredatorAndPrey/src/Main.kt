@@ -40,7 +40,6 @@ class Main : JPanel(), Runnable {
         world = World(screen.width / CELL_SIZE, screen.height / CELL_SIZE)
     
         window.isVisible = true
-        
     }
     
     @Synchronized
@@ -110,7 +109,6 @@ class Main : JPanel(), Runnable {
         
         for(y in 0 until world.height) {
             for(x in 0 until world.width) {
-                // NOTE: No need to display the black squares
                 if(world.creatures[x][y].type == Creature.Type.NONE)
                     continue
                 

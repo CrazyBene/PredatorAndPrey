@@ -37,68 +37,67 @@ class World(val width: Int, val height: Int) {
         }
     }
     
-    // NOTE: This loop should maybe be random or the oldest creatures move first (same creature order all the time)
     fun step() {
         stepCount++
         stepFlag = if(stepFlag == 0) 1 else 0
         
-//        shuffleNumbers()
-//
-//        points.forEach {
-//            val x = it.first
-//            val y = it.second
-//
-//            // Get the current creature
-//            val creature = creatures[x][y]
-//
-//            // If the creature already interacted this turn, ignore it
-//            if(creature.stepFlag != stepFlag) {
-//                // If it is nothing (none) just ignore it
-//                if(creature.type != Creature.Type.NONE) {
-//                    // Get the creature on the tile the creature wants to move
-//                    val otherCreature = getRandomNeighborCreature(x, y)
-//
-//                    // HERE are the rules of this cellular automata
-//                    when(creature.type) {
-//                        Creature.Type.Predator -> stepPredator(creature, otherCreature)
-//                        Creature.Type.Prey     -> stepPrey(creature, otherCreature)
-//
-//                        Creature.Type.NONE     -> {
-//                        }
-//                    }
-//                }
-//            }
-//        }
-        
-        for(y in 0 until height) {
-            for(x in 0 until width) {
+        shuffleNumbers()
 
-                // Get the current creature
-                val creature = creatures[x][y]
+        points.forEach {
+            val x = it.first
+            val y = it.second
 
-                // If the creature already interacted this turn, ignore it
-                if(creature.stepFlag == stepFlag)
-                    continue
-                else
-                    creature.stepFlag = stepFlag
+            // Get the current creature
+            val creature = creatures[x][y]
 
+            // If the creature already interacted this turn, ignore it
+            if(creature.stepFlag != stepFlag) {
                 // If it is nothing (none) just ignore it
-                if(creature.type == Creature.Type.NONE)
-                    continue
+                if(creature.type != Creature.Type.NONE) {
+                    // Get the creature on the tile the creature wants to move
+                    val otherCreature = getRandomNeighborCreature(x, y)
 
-                // Get the creature on the tile the creature wants to move
-                val otherCreature = getRandomNeighborCreature(x, y)
+                    // HERE are the rules of this cellular automata
+                    when(creature.type) {
+                        Creature.Type.Predator -> stepPredator(creature, otherCreature)
+                        Creature.Type.Prey     -> stepPrey(creature, otherCreature)
 
-                // HERE are the rules of this cellular automata
-                when(creature.type) {
-                    Creature.Type.Predator -> stepPredator(creature, otherCreature)
-                    Creature.Type.Prey     -> stepPrey(creature, otherCreature)
-
-                    Creature.Type.NONE     -> {
+                        Creature.Type.NONE     -> {
+                        }
                     }
                 }
             }
         }
+        
+//        for(y in 0 until height) {
+//            for(x in 0 until width) {
+//
+//                // Get the current creature
+//                val creature = creatures[x][y]
+//
+//                // If the creature already interacted this turn, ignore it
+//                if(creature.stepFlag == stepFlag)
+//                    continue
+//                else
+//                    creature.stepFlag = stepFlag
+//
+//                // If it is nothing (none) just ignore it
+//                if(creature.type == Creature.Type.NONE)
+//                    continue
+//
+//                // Get the creature on the tile the creature wants to move
+//                val otherCreature = getRandomNeighborCreature(x, y)
+//
+//                // HERE are the rules of this cellular automata
+//                when(creature.type) {
+//                    Creature.Type.Predator -> stepPredator(creature, otherCreature)
+//                    Creature.Type.Prey     -> stepPrey(creature, otherCreature)
+//
+//                    Creature.Type.NONE     -> {
+//                    }
+//                }
+//            }
+//        }
     }
     
     // The rules for a predator

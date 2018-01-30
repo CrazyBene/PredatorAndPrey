@@ -3,6 +3,9 @@ import java.util.concurrent.ThreadLocalRandom
 class World(val width: Int, val height: Int) {
     
     var creatures = Array(width) { Array(height) { Creature(Creature.Type.NONE) } }
+//    var cells = Array(width) { Array(height) { Cell() } }
+    
+    private var stepFlag = 0
     
     init {
         for(y in 0 until height) {
@@ -12,23 +15,35 @@ class World(val width: Int, val height: Int) {
                     r > 100 -> creatures[x][y].type = Creature.Type.NONE
                     r > 50  -> creatures[x][y].type = Creature.Type.Prey
                     else    -> creatures[x][y].type = Creature.Type.Predator
+//                    r > 100 -> cells[x][y].creature = Creature(Creature.Type.NONE)
+//                    r > 50 -> cells[x][y].creature = Creature(Creature.Type.Prey)
+//                    else -> cells[x][y].creature = Creature(Creature.Type.Predator)
                 }
             }
         }
     }
     
-    // NOTE: Problem with this loop is, that it is possible that a creature can move to a position where he gets checked again
+    // NOTE: This loop should maybe be random or the oldest creatures move first (same creature order all the time)
     fun step() {
+        stepFlag = if(stepFlag == 0) 1 else 0
+        
+        
         for(y in 0 until height) {
             for(x in 0 until width) {
                 
                 // Get the current creature
                 val creature = creatures[x][y]
+//                val creature = cells[x][y].creature!!
+                
+                // If the creature already interacted this turn, ignore it
+                if(creature.stepFlag == stepFlag)
+                    continue
+                else
+                    creature.stepFlag = stepFlag
                 
                 // If it is nothing (none) just ignore it
                 if(creature.type == Creature.Type.NONE)
                     continue
-                
                 
                 // Get the creature on the tile the creature wants to move
                 val otherCreature = getRandomNeighborCreature(x, y)
@@ -110,13 +125,14 @@ class World(val width: Int, val height: Int) {
         // Get a movement
         val moveX = ThreadLocalRandom.current().nextInt(-1, 2)
         val moveY = ThreadLocalRandom.current().nextInt(-1, 2)
-    
+        
         var nextX = x + moveX
         var nextY = y + moveY
-    
+        
         nextX = if(nextX == width) 0 else if(nextX < 0) width - 1 else nextX
         nextY = if(nextY == height) 0 else if(nextY < 0) height - 1 else nextY
-        
+
+//        return cells[nextX][nextY].creature!!
         return creatures[nextX][nextY]
     }
     

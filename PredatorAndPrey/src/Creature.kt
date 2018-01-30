@@ -11,6 +11,8 @@ class Creature(var type: Type) {
             field = Math.min(value, MAX_HEALTH)
         }
     
+    var stepFlag = 0
+    
     fun getColor(): Color {
         val factor = hp.toFloat() / MAX_HEALTH.toFloat()
         return type.color.scale(factor)

@@ -17,7 +17,7 @@ class Main : JPanel(), Runnable {
     private var ticks = 0
     
     private val world: World
-    private val CELL_SIZE = 3
+    private val CELL_SIZE = 2
     
     init {
         window.title = "Predator and Prey"
@@ -99,8 +99,14 @@ class Main : JPanel(), Runnable {
         g2d.scale(1.0, -1.0)
         g2d.translate(0, -height)
         
+        if(world == null) return
+        
+        // NOTE: No need to display the black squares
         for(y in 0 until world.height) {
             for(x in 0 until world.width) {
+                if(world.creatures[x][y].type == Creature.Type.NONE)
+                    continue
+                
                 g2d.color = world.creatures[x][y].getColor()
                 if(CELL_SIZE == 1)
                     g2d.drawPixel(x, y)

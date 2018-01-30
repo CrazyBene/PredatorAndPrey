@@ -11,6 +11,7 @@ class Creature(var type: Type) {
             field = Math.min(value, MAX_HEALTH)
         }
     
+    // A Flag to determine if a creature already interacted in this step
     var stepFlag = 0
     
     fun getColor(): Color {

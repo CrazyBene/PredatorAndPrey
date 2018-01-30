@@ -17,7 +17,7 @@ class Main : JPanel(), Runnable {
     private var ticks = 0
     
     private val world: World
-    private val CELL_SIZE = 2
+    private val CELL_SIZE = 4
     
     init {
         window.title = "Predator and Prey"

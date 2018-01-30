@@ -3,9 +3,12 @@ import java.util.concurrent.ThreadLocalRandom
 class World(val width: Int, val height: Int) {
     
     var creatures = Array(width) { Array(height) { Creature(Creature.Type.NONE) } }
-//    var cells = Array(width) { Array(height) { Cell() } }
     
+    // A Flag to determine if a creature already interacted in this step
     private var stepFlag = 0
+    
+    var preyCount = 0
+    var predatorCount = 0
     
     init {
         for(y in 0 until height) {
@@ -15,9 +18,6 @@ class World(val width: Int, val height: Int) {
                     r > 100 -> creatures[x][y].type = Creature.Type.NONE
                     r > 50  -> creatures[x][y].type = Creature.Type.Prey
                     else    -> creatures[x][y].type = Creature.Type.Predator
-//                    r > 100 -> cells[x][y].creature = Creature(Creature.Type.NONE)
-//                    r > 50 -> cells[x][y].creature = Creature(Creature.Type.Prey)
-//                    else -> cells[x][y].creature = Creature(Creature.Type.Predator)
                 }
             }
         }
@@ -33,7 +33,6 @@ class World(val width: Int, val height: Int) {
                 
                 // Get the current creature
                 val creature = creatures[x][y]
-//                val creature = cells[x][y].creature!!
                 
                 // If the creature already interacted this turn, ignore it
                 if(creature.stepFlag == stepFlag)
@@ -132,7 +131,6 @@ class World(val width: Int, val height: Int) {
         nextX = if(nextX == width) 0 else if(nextX < 0) width - 1 else nextX
         nextY = if(nextY == height) 0 else if(nextY < 0) height - 1 else nextY
 
-//        return cells[nextX][nextY].creature!!
         return creatures[nextX][nextY]
     }
     

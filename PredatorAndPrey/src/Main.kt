@@ -20,20 +20,26 @@ class Main : JPanel(), Runnable {
     private val world: World
     private val CELL_SIZE = 4
     
+    private val customFont: Font
+    
     init {
+        val stream = Main::class.java.getResourceAsStream("Resources/small_pixel-7.ttf")
+        customFont = Font.createFont(Font.TRUETYPE_FONT, stream)
+        
         window.title = "Predator and Prey"
         window.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT)
         window.minimumSize = window.size
         window.isResizable = false
         window.setLocationRelativeTo(null)
-        window.isVisible = true
         
         window.add(screen)
         screen.background = Color.black
         window.pack()
         
         world = World(screen.width / CELL_SIZE, screen.height / CELL_SIZE)
+    
+        window.isVisible = true
         
     }
     
@@ -109,20 +115,19 @@ class Main : JPanel(), Runnable {
                     continue
                 
                 g2d.color = world.creatures[x][y].getColor()
-                if(CELL_SIZE == 1)
-                    g2d.drawPixel(x, y)
-                else
-                    g2d.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+                g2d.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
             }
         }
         
         g2d.scale(1.0, -1.0)
         val prey = world.preyCount
         val predator = world.predatorCount
+        val steps = world.stepCount
         g2d.color = Color.WHITE
-        g2d.font = Font("TimesRoman", Font.PLAIN, 20)
+        g2d.font = customFont.deriveFont(screen.width / 50f)
         g2d.drawString("Prey: $prey", 10, -height + 25)
         g2d.drawString("Predator: $predator", 10, -height + 50)
+        g2d.drawString("Steps: $steps", 10, -height + 75)
         
         g2d.dispose()
     }

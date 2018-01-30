@@ -9,6 +9,7 @@ class World(val width: Int, val height: Int) {
     
     var preyCount = 0
     var predatorCount = 0
+    var stepCount = 0
     
     init {
         for(y in 0 until height) {
@@ -31,6 +32,7 @@ class World(val width: Int, val height: Int) {
     
     // NOTE: This loop should maybe be random or the oldest creatures move first (same creature order all the time)
     fun step() {
+        stepCount++
         stepFlag = if(stepFlag == 0) 1 else 0
         
         
@@ -130,7 +132,7 @@ class World(val width: Int, val height: Int) {
         }
     }
     
-    fun getRandomNeighborCreature(x: Int, y: Int): Creature {
+    private fun getRandomNeighborCreature(x: Int, y: Int): Creature {
         // Get a movement
         val moveX = ThreadLocalRandom.current().nextInt(-1, 2)
         val moveY = ThreadLocalRandom.current().nextInt(-1, 2)
